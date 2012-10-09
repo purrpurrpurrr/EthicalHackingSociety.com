@@ -30,7 +30,32 @@ class Meeting_Controller extends Base_Controller
 	}
 	public function get_add()
 	{
-		// TODO: add code
+		// Validation rules
+		$rules = 
+		array(
+			'title' => 'required',
+			'room'  => 'required',
+			'when'  => 'required',
+			'body'  => 'required'
+			);
+		// Error messages
+		$messages = array('required' => 'The :attribute is required!');
+		// Try validating
+		$validation = Validator::make(Input::all(), $rules, $messages);
+		if($validation->fails()) return 'TODO: validation errors';
+		// Create new meeting
+		$meeting = 
+		new Meeting(
+			array(
+				'title' => Input::get('title'),
+				'room' => Input::get('room'),
+				'when' => Input::get('when'),
+				'body' => Input::get('body')
+				));
+		// Save it to the database
+		Auth::user()->meetings()->save($meeting);
+		// Redirect user to the resulting page
+		return Redirect::to_action('meeting@details', array($meeting->id));
 	}
 	public function post_add()
 	{
@@ -53,6 +78,10 @@ class Meeting_Controller extends Base_Controller
 		# code...
 	}
 	/* AJAX FUNCTIONS */
+	public function get_preview()
+	{
+		# code...
+	}
 	public function get_remove($id)
 	{
 		# code...
