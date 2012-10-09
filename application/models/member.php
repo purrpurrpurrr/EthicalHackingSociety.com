@@ -14,16 +14,16 @@ class Member extends Eloquent
 	{
 		return $this->has_many('Article');
 	}
-	public function avatar()
-	{
-		return $this->has_one('Avatar');
-	}
 	public function verification()
 	{
-		return $this->has_one('Verification');
+		return $this->has_many('Verification');
 	}
 	public function pwresets()
 	{
 		return $this->has_many('PwReset');
+	}
+	public function avatar()
+	{
+		return $this->has_one('Avatar');
 	}
 }
