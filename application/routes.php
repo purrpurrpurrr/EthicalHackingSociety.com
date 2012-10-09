@@ -32,9 +32,12 @@
 |
 */
 
+// Autoload controllers - DEVELOPMENT ONLY
+Route::controller(Controller::detect());
+
 Route::get('/', function()
 {
-	return View::make('home.index');
+	return Redirect::to_action("static");
 });
 
 /*
