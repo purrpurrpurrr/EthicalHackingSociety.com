@@ -28,14 +28,17 @@ class Meeting_Controller extends Base_Controller
 		$view = View::make('meetings.details', array('meeting'=>$meeting));
 		return $view;
 	}
-	public function get_add()
+	public function get_suggest()
+	{
+		$view = View::make('meetings.form-suggest');
+		return $view;
+	}
+	public function post_suggest()
 	{
 		// Validation rules
 		$rules = 
 		array(
 			'title' => 'required',
-			'room'  => 'required',
-			'when'  => 'required',
 			'body'  => 'required'
 			);
 		// Error messages
@@ -48,58 +51,99 @@ class Meeting_Controller extends Base_Controller
 		new Meeting(
 			array(
 				'title' => Input::get('title'),
-				'room' => Input::get('room'),
-				'when' => Input::get('when'),
-				'body' => Input::get('body')
+				'body'  => Input::get('body')
 				));
 		// Save it to the database
 		Auth::user()->meetings()->save($meeting);
 		// Redirect user to the resulting page
 		return Redirect::to_action('meeting@details', array($meeting->id));
 	}
-	public function post_add()
-	{
-		// TODO: add code
-	}
 	public function get_edit($id)
 	{
-		// TODO: edit code
+		$meeting = Meeting::find($id);
+		$view = View::make('meetings.form-edit', array('meeting'=>$meeting));
+		return $view;
 	}
 	public function post_edit()
 	{
-		// TODO: edit code
+		$rules = 
+		array(
+			'id'    => 'required',
+			'title' => 'required',
+			'body'  => 'required'
+			);
+		$messages = array('required' => 'The :attribute is required!');
+		$validation = Validator::make(Input::all(), $rules, $messages);
+		if($validation->fails()) return 'TODO: validations errors';
+		$meeting = Meeting::find(Input::get('id'));
+		$meeting->title = Input::get('title');
+		$meeting->body  = Input::get('body');
+		$meeting->save()
+		return Redirect::to_action('meeting@details', array($meeting->id));
 	}
 	public function get_approve($id)
 	{
-		# code...
+		$meeting = Meeting::find($id);
+		$view = View::make('meetings.form-approve', array('meeting'=>$meeting));
+		return $view;
 	}
 	public function post_approve()
 	{
-		# code...
+		$rules = 
+		array(
+			'id'    => 'required',
+			'title' => 'required',
+			'body'  => 'required',
+			'room'  => 'required',
+			'when'  => 'required'
+			);
+		$messages = array('required' => 'The :attribute is required!');
+		$validation = Validator::make(Input::all(), $rules, $messages);
+		if($validation->fails()) return 'TODO: validations errors';
+		$meeting = Meeting::find(Input::get('id'));
+		$meeting->title  = Input::get('title');
+		$meeting->room   = Input::get('room');
+		$meeting->when   = Input::get('when');
+		$meeting->body   = Input::get('body');
+		$meeting->status = 1;
+		$meeting->save()
+		return Redirect::to_action('meeting@details', array($meeting->id));
 	}
 	/* AJAX FUNCTIONS */
 	public function get_preview()
 	{
-		# code...
+		# Parse BBCodes and stuff if we are going to be using those. Return JSON output to use with jQuery.
 	}
 	public function get_remove($id)
 	{
-		# code...
+		Meeting::find($id)->delete();
+		return 'TODO: Success alert for AJAX';
 	}
 	public function get_hide($id)
 	{
-		# code...
+		$meeting = Meeting::find($id);
+		$meeting->status = 2;
+		return 'TODO: Success alert for AJAX';
 	}
 	public function get_show($id)
 	{
-		# code...
+		$meeting = Meeting::find($id);
+		$meetings->status = 1;
+		$meeting->save();
+		return 'TODO: Success alert for AJAX';
 	}
 	public function get_upvote($id)
 	{
-		# code...
+		$meeting = Meeting::find($id);
+		$meeting->votes++;
+		$meeting->save();
+		return 'TODO: Success alert for AJAX';
 	}
 	public function get_downvote($id)
 	{
-		# code...
+		$meeting = Meeting::find($id);
+		$meeting->votes--;
+		$meeting->save();
+		return 'TODO: Success alert for AJAX';
 	}
 }

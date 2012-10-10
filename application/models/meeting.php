@@ -4,7 +4,7 @@ class Meeting extends Eloquent
 {
 	public function members()
 	{
-		return $this->has_many_and_belongs_to('Member');
+		return $this->has_many_and_belongs_to('User');
 	}
 	public function tags()
 	{

@@ -7,7 +7,7 @@ class Article extends Eloquent
 	
 	public function author()
 	{
-		return $this->belongs_to('Member');
+		return $this->belongs_to('User');
 	}
 	public function tags()
 	{

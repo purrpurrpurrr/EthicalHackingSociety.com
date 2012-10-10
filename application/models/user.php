@@ -1,6 +1,6 @@
 <?php
 
-class Member extends Eloquent
+class User extends Eloquent
 {
 	public function meetings()
 	{
