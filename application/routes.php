@@ -32,12 +32,15 @@
 |
 */
 
+// Register assets here
+Asset::add('jquery', 'js/jquery.js');
+Asset::add('devstyles', 'css/devstyles.css');
 // Autoload controllers - DEVELOPMENT ONLY
 Route::controller(Controller::detect());
 
 Route::get('/', function()
 {
-	return Redirect::to_action("static");
+	return Redirect::to_action("meeting");
 });
 
 /*

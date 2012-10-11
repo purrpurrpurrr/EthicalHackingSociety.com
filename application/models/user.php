@@ -14,6 +14,10 @@ class User extends Eloquent
 	{
 		return $this->has_many('Article');
 	}
+	public function resources()
+	{
+		return $this->has_many('Resource');
+	}
 	public function verification()
 	{
 		return $this->has_many('Verification');

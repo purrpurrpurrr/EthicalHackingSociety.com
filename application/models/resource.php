@@ -1,6 +1,6 @@
 <?php
 
-class Upload extends Eloquent
+class Resource extends Eloquent
 {
 	public function meeting()
 	{

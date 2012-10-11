@@ -19,7 +19,7 @@ class Member_Controller extends Base_Controller
 	{
 		$rules =
 		array(
-			'email'    => 'required',
+			'email'    => 'required|unique:users',
 			'password' => 'required'
 			);
 		$messages = array('required'=> 'The :attribute is required!');
@@ -55,6 +55,11 @@ class Member_Controller extends Base_Controller
 			// Unsuccessful auth attempt
 			return 'TODO: auth errors';
 		}
+	}
+	public function get_signout()
+	{
+		Auth::logout();
+		return Redirect::to_action('meeting');
 	}
 	public function get_verify($supplied_key = false)
 	{
@@ -122,10 +127,42 @@ class Member_Controller extends Base_Controller
 	}
 	public function post_settings()
 	{
-		# code...
+		$rules = 
+		array(
+			'name'       => 'required',
+			'student_id' => 'required'
+			);
+		$messages = 
+		array(
+			'required' => 'The :attribute is required!'
+			);
+		$validation = Validator::make(Input::all(), $rules, $messages);
+		if($validation->fails()) return 'TODO: validation errors';
+		$member = Auth::user();
+		$member->name       = Input::get('name');
+		$member->student_id => Input::get('student_id');
+		$member->save();
+		return 'AJAX success response';
 	}
 	public function post_changepassword()
 	{
-		# code...
+		$rules = 
+		array(
+			'old_password' => 'required',
+			'new_password' => 'required|confirmed'
+			);
+		$messages =
+		array(
+			'required'  => 'The :attribute is required!',
+			'confirmed' => 'The :attribute must be confirmed!'
+			);
+		$validation = Validator::make(Input::all(), $rules, $messages);
+		if($validation->fails()) return 'TODO: validation errors';
+		$member = Auth::user();
+		// This has to be moved to model!
+		$old_password_in = Hash::make(Input::get('old_password'));
+		if($old_password_in != $member->password) return 'TODO: validation errors';
+		$member->password = Hash::make(Input::get('new_password'));
+		return 'AJAX success response';
 	}
 }

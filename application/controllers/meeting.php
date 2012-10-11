@@ -6,31 +6,32 @@ class Meeting_Controller extends Base_Controller
 
 	public function get_index()
 	{
-		$meetings = Meeting::past_or_today_approved();
-		$view = View::make('meetings.index', array('meetings'=>$meetings));
+		$meetings = "derp";
+		// $meetings = Meeting::past_or_today_approved();
+		$view = View::make('meeting.index', array('meetings'=>$meetings));
 		return $view;
 	}
 	public function get_upcoming()
 	{
 		$meetings = Meeting::upcoming_approved();
-		$view = View::make('meetings.upcoming', array('meetings'=>$meetings));
+		$view = View::make('meeting.upcoming', array('meetings'=>$meetings));
 		return $view;
 	}
 	public function get_suggested()
 	{
 		$meetings = Meeting::suggested();
-		$view = View::make('meetings.suggested', array('meetings'=>$meetings));
+		$view = View::make('meeting.suggested', array('meetings'=>$meetings));
 		return $view;
 	}
 	public function get_details($id)
 	{
 		$meeting = Meeting::find($id);
-		$view = View::make('meetings.details', array('meeting'=>$meeting));
+		$view = View::make('meeting.details', array('meeting'=>$meeting));
 		return $view;
 	}
 	public function get_suggest()
 	{
-		$view = View::make('meetings.form-suggest');
+		$view = View::make('meeting.form-suggest');
 		return $view;
 	}
 	public function post_suggest()
@@ -61,7 +62,7 @@ class Meeting_Controller extends Base_Controller
 	public function get_edit($id)
 	{
 		$meeting = Meeting::find($id);
-		$view = View::make('meetings.form-edit', array('meeting'=>$meeting));
+		$view = View::make('meeting.form-edit', array('meeting'=>$meeting));
 		return $view;
 	}
 	public function post_edit()
@@ -78,13 +79,13 @@ class Meeting_Controller extends Base_Controller
 		$meeting = Meeting::find(Input::get('id'));
 		$meeting->title = Input::get('title');
 		$meeting->body  = Input::get('body');
-		$meeting->save()
+		$meeting->save();
 		return Redirect::to_action('meeting@details', array($meeting->id));
 	}
 	public function get_approve($id)
 	{
 		$meeting = Meeting::find($id);
-		$view = View::make('meetings.form-approve', array('meeting'=>$meeting));
+		$view = View::make('meeting.form-approve', array('meeting'=>$meeting));
 		return $view;
 	}
 	public function post_approve()
@@ -106,7 +107,7 @@ class Meeting_Controller extends Base_Controller
 		$meeting->when   = Input::get('when');
 		$meeting->body   = Input::get('body');
 		$meeting->status = 1;
-		$meeting->save()
+		$meeting->save();
 		return Redirect::to_action('meeting@details', array($meeting->id));
 	}
 	/* AJAX FUNCTIONS */
