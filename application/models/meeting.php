@@ -14,8 +14,4 @@ class Meeting extends Eloquent
 	{
 		return $this->has_many('Comment');
 	}
-	public function resources()
-	{
-		return $this->has_many('Resource');
-	}
 }

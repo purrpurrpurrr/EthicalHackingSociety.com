@@ -25,17 +25,22 @@ class Member_Controller extends Base_Controller
 		$messages = array('required'=> 'The :attribute is required!');
 		$validation = Validator::make(Input::all(), $rules, $messages);
 		if($validation->fails()) return 'TODO: validations errors';
-		// TODO:
-		// email checked against regexp
-		// -> on success student id is compared to Duncan's list
-		// -> on success all the additional fields are filled from Duncan's list
-		// -> else redirected to settings page to fill in the details
-		$user =
-		User::create(
-			array(
-				'email'    => Input::get('email'),
-				'password' => Hash::make(Input::get('password'))
-				));
+		$member = new User;
+		$member->email    = Input::get('email');
+		$member->password = Hash::make(Input::get('password'));
+		// Check if email is Abertay
+		$pattern_abertay = '/\d{7}@live.abertay.ac.uk/';
+		$regex = preg_match($pattern_abertay, $member->email);
+		if($regex == 1)
+		{
+			// Autofill student id if it is
+			$member->student_id = substr($member->email, 0, 7);
+			// If Duncan allows us to, we could use current database to grab the name
+			// $member->name = $name_from_current;
+		}
+		$member->save();
+		Auth::login($member);
+		return Redirect::to_action('member@settings');
 		# TODO
 		# send verification email
 	}
