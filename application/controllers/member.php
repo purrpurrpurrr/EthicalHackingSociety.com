@@ -118,7 +118,7 @@ class Member_Controller extends Base_Controller
 	{
 		$member = User::find($id);
 		$member->paid = true;
-		$member->save()
+		$member->save();
 		return 'AJAX success response';
 	}
 	public function post_avatar()
@@ -140,7 +140,7 @@ class Member_Controller extends Base_Controller
 		if($validation->fails()) return 'TODO: validation errors';
 		$member = Auth::user();
 		$member->name       = Input::get('name');
-		$member->student_id => Input::get('student_id');
+		$member->student_id = Input::get('student_id');
 		$member->save();
 		return 'AJAX success response';
 	}
