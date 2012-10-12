@@ -27,14 +27,22 @@
 		<div class="row">
 			<div class="span2">
 				<ul class="nav nav-list">
-					<li class="nav-header">Temporary navigation</li>
+					<li class="nav-header">Hello 
+						@if(Auth::check())
+						{{Auth::user()->name}} ({{Auth::user()->student_id}})
+						@endif
+					</li>
 					<li><a href="{{action('meeting')}}">Meetings</a></li>
+					@if(Auth::guest())
 					<li><a href="{{action('member@signup')}}">Sign up</a></li>
 					<li><a href="{{action('member@signin')}}">Sign in</a></li>
+					@endif
 					<li><a href="{{action('meeting@suggest')}}">Suggest a talk</a></li>
 					<li><a href="{{action('meeting@upcoming')}}">Upcoming talks</a></li>
+					@if(Auth::check())
 					<li><a href="{{action('member@settings')}}">Settings</a></li>
 					<li><a href="{{action('member@signout')}}">Sign out</a></li>
+					@endif
 				</ul>
 			</div>
 			<div class="span10">
