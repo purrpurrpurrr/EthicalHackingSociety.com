@@ -39,6 +39,7 @@
 					@endif
 					<li><a href="{{action('meeting@suggest')}}">Suggest a talk</a></li>
 					<li><a href="{{action('meeting@upcoming')}}">Upcoming talks</a></li>
+					<li><a href="{{action('meeting@suggested')}}">Suggested talks</a></li>
 					@if(Auth::check())
 					<li><a href="{{action('member@settings')}}">Settings</a></li>
 					<li><a href="{{action('member@signout')}}">Sign out</a></li>

@@ -134,8 +134,8 @@ class Member_Controller extends Base_Controller
 	{
 		$rules = 
 		array(
-			'name'       => 'required',
-			'student_id' => 'required'
+			// 'name'       => 'required',
+			// 'student_id' => 'required'
 			);
 		$messages = 
 		array(

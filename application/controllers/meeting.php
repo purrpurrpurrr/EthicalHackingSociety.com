@@ -4,23 +4,25 @@ class Meeting_Controller extends Base_Controller
 {
 	public $restful = true;
 
+	// This needs to be discussed together:
+	// Maybe there should be branching for users with admin rights when making views?
+	// Maybe there should be branching for users with admin rights inside templates? (may get cluttered)
 	public function get_index()
 	{
-		$meetings = "derp";
-		// $meetings = Meeting::past_or_today_approved();
+		$meetings = Meeting::past_or_today_approved();
 		$view = View::make('meeting.index', array('meetings'=>$meetings));
 		return $view;
 	}
 	public function get_upcoming()
 	{
 		$meetings = Meeting::upcoming_approved();
-		$view = View::make('meeting.upcoming', array('meetings'=>$meetings));
+		$view = View::make('meeting.index', array('meetings'=>$meetings));
 		return $view;
 	}
 	public function get_suggested()
 	{
 		$meetings = Meeting::suggested();
-		$view = View::make('meeting.suggested', array('meetings'=>$meetings));
+		$view = View::make('meeting.index', array('meetings'=>$meetings));
 		return $view;
 	}
 	public function get_details($id)

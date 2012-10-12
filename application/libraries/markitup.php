@@ -30,7 +30,7 @@
 // ----------------------------------------------------------------------------
 class Markitup
 {
-	const "EMOTICONS_DIR" = "/images/emoticons/";
+	const EMOTICONS_DIR = "/images/emoticons/";
 	// Some functions to escape HTML by Georgi Boiko
 	/**
 	 * Escapes HTML tags in the string

@@ -52,6 +52,7 @@ class Install_Database {
 			$table->text('body');
 			$table->timestamp('when')->nullable();
 			$table->string('room')->nullable();
+			$table->boolean('approved')->default(false);
 			$table->timestamps();
 		});
 		Schema::create('tags', function($table){
@@ -100,7 +101,7 @@ class Install_Database {
 			$table->foreign('tag_id')->references('id')->on('tags');
 			$table->timestamps();
 		});
-		Schema::create('meeting_member', function($table){
+		Schema::create('meeting_user', function($table){
 			$table->increments('id');
 			$table->integer('meeting_id')->unsigned();
 			$table->integer('user_id')->unsigned();
@@ -108,6 +109,54 @@ class Install_Database {
 			$table->foreign('user_id')->references('id')->on('users');
 			$table->timestamps();
 		});
+		// Now populate with some test data
+		$date = new \DateTime;
+		DB::table('users')->insert(
+			array(
+				'email'      => 'bobrdobr',
+				'password'   => Hash::make('bobr'),
+				'paid'       => false,
+				'created_at' => $date,
+				'updated_at' => $date
+				));
+		DB::table('users')->insert(
+			array(
+				'name'       => 'John Doe',
+				'email'      => 'bobrdobr1',
+				'password'   => Hash::make('bobr'),
+				'paid'       => false,
+				'created_at' => $date,
+				'updated_at' => $date
+				));
+		DB::table('meetings')->insert(
+			array(
+				'title'      => 'Lorem ipsum',
+				'body'       => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+				'when'       => $date,
+				'room'       => '4511',
+				'approved'   => true,
+				'created_at' => $date,
+				'updated_at' => $date
+				));
+		DB::table('meetings')->insert(
+			array(
+				'title'      => 'Lorem ipsum [UNAPPROVED]',
+				'body'       => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+				'when'       => $date,
+				'room'       => '4511',
+				'created_at' => $date,
+				'updated_at' => $date
+				));
+		DB::table('meeting_user')->insert(
+			array(
+				'user_id'    => 1,
+				'meeting_id' => 1
+				));
+		DB::table('meeting_user')->insert(
+			array(
+				'user_id'    => 2,
+				'meeting_id' => 1
+				));
 	}
 
 	/**
@@ -117,7 +166,7 @@ class Install_Database {
 	 */
 	public function down()
 	{
-		DB::query('delete from meeting_member');
+		DB::query('delete from meeting_user');
 		DB::query('delete from meeting_tag');
 		DB::query('delete from article_tag');
 		DB::query('delete from group_user');
@@ -127,8 +176,9 @@ class Install_Database {
 		DB::query('delete from meetings');
 		DB::query('delete from articles');
 		DB::query('delete from avatars');
+		DB::query('delete from groups');
 		DB::query('delete from users');
-		Schema::drop('meeting_member');
+		Schema::drop('meeting_user');
 		Schema::drop('meeting_tag');
 		Schema::drop('article_tag');
 		Schema::drop('group_user');
@@ -138,6 +188,7 @@ class Install_Database {
 		Schema::drop('meetings');
 		Schema::drop('articles');
 		Schema::drop('avatars');
+		Schema::drop('groups');
 		Schema::drop('users');
 	}
 
