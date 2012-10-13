@@ -5,7 +5,6 @@
 {{Form::control_group(Form::label('student_id','Student ID'),Form::xlarge_text('student_id',Auth::user()->student_id,array('placeholder'=>'Put something here!')),'')}}
 {{Form::actions(array(Buttons::primary_submit('Save')))}}
 {{Form::close()}}
-<div id="output"></div>
 <script type="text/javascript">
 	// AJAX code
 	$('#settingsForm').live('submit', function(e){
@@ -17,8 +16,8 @@
 		// Send AJAX-post request
 		$.post($(this).attr('action'), { name: name, student_id: student_id },
 			function(data){
-				// Display the response (we will use alert boxes) TODO
-				$('#output').html(data);
+				// Display the response
+				$('#ajax-output').prepend(data);
 			});
 	}); 
 </script>

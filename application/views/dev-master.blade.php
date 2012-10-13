@@ -21,13 +21,19 @@
 	{{Asset::scripts();}}
 	{{Asset::container('bootstrapper')->styles();}}
 	{{Asset::container('bootstrapper')->scripts();}}
+	<script type="text/javascript">
+		$(document).ready(function(){
+			@section('docready');
+			@yield_section
+		});
+	</script>
 </head>
 <body>
 	<div class="container">
 		<div class="row">
 			<div class="span2">
 				<ul class="nav nav-list">
-					<li class="nav-header">Hello 
+					<li class="nav-header">Hello
 						@if(Auth::check())
 						{{Auth::user()->name}} ({{Auth::user()->student_id}})
 						@endif
@@ -36,11 +42,13 @@
 					@if(Auth::guest())
 					<li><a href="{{action('member@signup')}}">Sign up</a></li>
 					<li><a href="{{action('member@signin')}}">Sign in</a></li>
+					<li><a href="{{action('member@rpwreset')}}">Reset password</a></li>
 					@endif
 					<li><a href="{{action('meeting@suggest')}}">Suggest a talk</a></li>
 					<li><a href="{{action('meeting@upcoming')}}">Upcoming talks</a></li>
 					<li><a href="{{action('meeting@suggested')}}">Suggested talks</a></li>
 					@if(Auth::check())
+					<li><a href="{{action('meeting@changepassword')}}">Change password</a></li>
 					<li><a href="{{action('member@settings')}}">Settings</a></li>
 					<li><a href="{{action('member@signout')}}">Sign out</a></li>
 					@endif
@@ -52,6 +60,7 @@
 				@yield_section
 			</div>
 		</div>
+		<div id="ajax-output"></div>
 	</div>
 </body>
 </html>

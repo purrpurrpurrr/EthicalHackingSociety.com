@@ -17,14 +17,29 @@ class Member_Controller extends Base_Controller
 	}
 	public function post_signup()
 	{
+		// Trying to keep the validation rules simple
 		$rules =
 		array(
-			'email'    => 'required|unique:users',
-			'password' => 'required'
+			'email'    => 'required|email|unique:users',
+			'password' => 'required|between:6,64'
 			);
-		$messages = array('required'=> 'The :attribute is required!');
+		// You may set up all kinds of custom error messages! Check this out:
+		$messages =
+		array(
+			'required'         => 'The :attribute is required!',
+			'email'            => 'Email format is invalid.',
+			'email_unique'     => 'Email is already in the database.',
+			'password_between' => 'Your password needs to be at least :min characters long.'
+			);
 		$validation = Validator::make(Input::all(), $rules, $messages);
-		if($validation->fails()) return 'TODO: validations errors';
+		if($validation->fails())
+		{
+			$errors = $validation->errors->all(Alert::error(':message'));
+			$errors = implode('', $errors);
+			return Redirect::to_action('member@signup')
+				->with('errors',$errors)
+				->with_input();
+		}
 		$member = new User;
 		$member->email    = Input::get('email');
 		$member->password = Hash::make(Input::get('password'));
@@ -58,7 +73,9 @@ class Member_Controller extends Base_Controller
 		else
 		{
 			// Unsuccessful auth attempt
-			return 'TODO: auth errors';
+			return Redirect::to_action('member@signin')
+				->with('errors',Alert::error('Your authentication attempt was unsuccessful. Check your details.'))
+				->with_input();
 		}
 	}
 	public function get_signout()
@@ -132,26 +149,27 @@ class Member_Controller extends Base_Controller
 	}
 	public function post_settings()
 	{
-		$rules = 
-		array(
-			// 'name'       => 'required',
-			// 'student_id' => 'required'
-			);
-		$messages = 
-		array(
-			'required' => 'The :attribute is required!'
-			);
-		$validation = Validator::make(Input::all(), $rules, $messages);
-		if($validation->fails()) return 'TODO: validation errors';
+		// $rules =
+		// array(
+		// 	'name'       => 'required',
+		// 	'student_id' => 'required'
+		// 	);
+		// $messages =
+		// array(
+		// 	'required' => 'The :attribute is required!'
+		// 	);
+		// $validation = Validator::make(Input::all(), $rules, $messages);
+		// #TODO ERROR MESSAGES
+		// if($validation->fails()) return Alert::error('There were errors!');
 		$member = Auth::user();
 		$member->name       = Input::get('name');
 		$member->student_id = Input::get('student_id');
 		$member->save();
-		return 'AJAX success response';
+		return Alert::success('Settings saved!');
 	}
 	public function post_changepassword()
 	{
-		$rules = 
+		$rules =
 		array(
 			'old_password' => 'required',
 			'new_password' => 'required|confirmed'
